@@ -19,12 +19,15 @@ class ArticleSpider(scrapy.Spider):
     start_urls = ["https://www.sciencedirect.com/science/article/pii/S0142694X1500054X"]
 
     def start_requests(self):
-        headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0'}
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0'}
 
         for url in self.start_urls:
             yield scrapy.Request(url, headers=headers)
 
     def parse(self, response, **kwargs):
+        filename = response.url.split("/")[-1] + '.html'
+        with open(filename, 'wb') as f:
+            f.write(response.body)
         authors = response.css('a.author').getall()
         author_names = []
         for author in authors:
@@ -41,6 +44,9 @@ class ArticleSpider(scrapy.Spider):
                 'content': html_resp.css('p::text').get()
             }
             sub.append(point)
+
+        # body = response.css('div.Body *::text').getall()
+        # print(body)
 
         yield {
             'publication-title': response.css('div.Publication div.publication-volume h2.publication-title a::text').get(),
