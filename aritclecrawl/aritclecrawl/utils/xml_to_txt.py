@@ -16,10 +16,8 @@ def parse(filename):
                     file.write(f"\t\t\t{highlight.text}\n\n")
 
             if child.tag == "abstract":
-                file.write("@&#ABSTRACT@&#\n")
+                file.write("@&#ABSTRACT@&#\n\n")
                 for point in child:
-                    if point.tag == "heading":
-                        file.write(f"@&#{point.text.upper()}@&#\n")
-                    else:
+                    if point.tag == "content":
                         file.write(point.text.strip() + "\n\n")
 
