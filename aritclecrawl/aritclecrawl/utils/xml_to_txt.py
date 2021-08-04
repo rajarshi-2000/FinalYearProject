@@ -1,11 +1,11 @@
 import xml.etree.ElementTree as ET
 
 
-def parse(filename):
+def parse(filename: str):
     tree = ET.parse(filename)
     root = tree.getroot()
 
-    txtfile = filename[:-4] + ".txt"
+    txtfile = filename.replace("xml", "txt")
     with open(txtfile, "w") as file:
         for child in root:
             if child.tag == "title":

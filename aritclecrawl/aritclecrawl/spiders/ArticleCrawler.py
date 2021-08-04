@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import scrapy
 from scrapy.http import HtmlResponse
@@ -17,9 +18,21 @@ def readDataFile(path: str) -> list:
     return links
 
 
+# txt_folder = Path('D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/data/').rglob('*.txt')
+#
+# files = [x for x in txt_folder]
+
+filename = "D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/data/Social Sciences1.txt"
+
+file = filename[:-4].rpartition('/')[2]
+xmlfolder = os.path.join("D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/extracted/", file + "/xml")
+txtfolder = os.path.join("D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/extracted/", file + "/txt")
+os.makedirs(xmlfolder)
+os.makedirs(txtfolder)
+
 class ArticleSpider(scrapy.Spider):
     name = "articles"
-    start_urls = readDataFile("E:/FinalYearProject/aritclecrawl/data/NHP1.txt")
+    start_urls = readDataFile(filename)
 
     def start_requests(self):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0'}
@@ -40,6 +53,9 @@ class ArticleSpider(scrapy.Spider):
 
         highlights = response.css("div.author-highlights dd.list-description p::text").getall()
 
-        filename = "E:/FinalYearProject/aritclecrawl/data/NHP1/" + response.url.split("/")[-1] + '.xml'
-        GenerateXml(filename, response.css('span.title-text::text').get(), highlights, sub)
-        parse(filename)
+        # filename = "D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/data/PTPS1/xml/" + response.url.split("/")[-1] + '.xml'
+
+        xmlfilename = os.path.join(xmlfolder, response.url.split("/")[-1] + '.xml')
+
+        GenerateXml(xmlfilename, response.css('span.title-text::text').get(), highlights, sub)
+        parse(xmlfilename)
