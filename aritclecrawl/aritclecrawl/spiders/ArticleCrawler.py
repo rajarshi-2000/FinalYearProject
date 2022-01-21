@@ -1,6 +1,4 @@
 import os
-from pathlib import Path
-
 import scrapy
 from scrapy.http import HtmlResponse
 from ..utils.xml_tree import GenerateXml
@@ -19,16 +17,16 @@ def readDataFile(path: str) -> list:
 
 
 # txt_folder = Path('D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/data/').rglob('*.txt')
-#
 # files = [x for x in txt_folder]
 
-filename = "D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/data/Social Sciences1.txt"
+filename = "E:/FinalYearProject/aritclecrawl/data/CE1.txt"
 
 file = filename[:-4].rpartition('/')[2]
-xmlfolder = os.path.join("D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/extracted/", file + "/xml")
-txtfolder = os.path.join("D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/extracted/", file + "/txt")
-os.makedirs(xmlfolder)
-os.makedirs(txtfolder)
+xml_folder = os.path.join("E:/FinalYearProject/aritclecrawl/extracted/", file + "/xml")
+txt_folder = os.path.join("E:/FinalYearProject/aritclecrawl/extracted/", file + "/txt")
+os.makedirs(xml_folder)
+os.makedirs(txt_folder)
+
 
 class ArticleSpider(scrapy.Spider):
     name = "articles"
@@ -53,9 +51,7 @@ class ArticleSpider(scrapy.Spider):
 
         highlights = response.css("div.author-highlights dd.list-description p::text").getall()
 
-        # filename = "D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/data/PTPS1/xml/" + response.url.split("/")[-1] + '.xml'
+        xml_filename = os.path.join(xml_folder, response.url.split("/")[-1] + '.xml')
 
-        xmlfilename = os.path.join(xmlfolder, response.url.split("/")[-1] + '.xml')
-
-        GenerateXml(xmlfilename, response.css('span.title-text::text').get(), highlights, sub)
-        parse(xmlfilename)
+        GenerateXml(xml_filename, response.css('span.title-text::text').get(), highlights, sub)
+        parse(xml_filename)
