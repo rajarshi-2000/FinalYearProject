@@ -1,5 +1,6 @@
 import scrapy
-from aritclecrawl.et_link_gen import get_links
+from ..et_link_gen import get_links
+from scrapy.crawler import CrawlerProcess
 
 
 def readDataFile(path: str) -> list:
@@ -13,17 +14,6 @@ def readDataFile(path: str) -> list:
     return links
 
 
-# txt_folder = Path('D:/COLLEGE/FinalYearProject/FinalYearProject/aritclecrawl/data/').rglob('*.txt')
-# files = [x for x in txt_folder]
-
-# filename = "E:/FinalYearProject/aritclecrawl/data/CE1.txt"
-#
-# file = filename[:-4].rpartition('/')[2]
-# xml_folder = os.path.join("E:/FinalYearProject/aritclecrawl/extracted/", file + "/xml")
-# txt_folder = os.path.join("E:/FinalYearProject/aritclecrawl/extracted/", file + "/txt")
-# os.makedirs(xml_folder)
-# os.makedirs(txt_folder)
-
 class NewsSpider(scrapy.Spider):
     name = "news"
     start_urls = get_links(2018)
@@ -35,5 +25,22 @@ class NewsSpider(scrapy.Spider):
             yield scrapy.Request(url, headers=headers)
 
     def parse(self, response, **kwargs):
+        date = response.css('td.contentbox5 b::text')[1].get()
+        [day, month] = date.split(",")[0].split()
+
         articles = response.css('ul.content a::attr(href)').getall()
-        print(articles)
+
+        with open(f"E:/FinalYearProject/aritclecrawl/2018/{month}/{day}_{month}.txt", "w") as f:
+            for article in articles:
+                f.write("https://economictimes.indiatimes.com/"+article+"\n")
+
+
+# process = CrawlerProcess(settings={
+#     "FEEDS": {
+#         "items.json": {"format": "json"},
+#     },
+# })
+#
+# process.crawl(NewsSpider)
+# process.start() # the script will block here until the crawling is finished
+
