@@ -30,3 +30,23 @@ def get_links(year):
         month += 1
 
     return links
+
+
+def create_file_struct(year):
+    folder = f"E:/FinalYearProject/et_articles/{year}"
+    month = 0
+
+    while month < 12:
+        days = months[month][0]
+        monthkey = months[month][1]
+
+        while days > 0:
+            day = f"0{days}" if days < 10 else str(days)
+            foldername = os.path.join(f"{folder}/{monthkey}/{day}")
+            os.makedirs(foldername)
+            days -= 1
+
+        month += 1
+
+
+create_file_struct(2018)

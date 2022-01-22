@@ -1,0 +1,34 @@
+import xml.etree.ElementTree as ET
+from xml.dom.minidom import parse
+
+
+def GenerateXml(id, day, month, year, title, synopsis, body):
+    root = ET.Element("article")
+
+    day_element = ET.SubElement(root, "day")
+    day_element.text = day.encode("ascii", "ignore").decode()
+
+    month_element = ET.SubElement(root, "month")
+    month_element.text = month.encode("ascii", "ignore").decode()
+
+    year_element = ET.SubElement(root, "year")
+    year_element.text = year.encode("ascii", "ignore").decode()
+
+    title_element = ET.SubElement(root, "title")
+    title_element.text = title.encode("ascii", "ignore").decode()
+
+    synopsis_element = ET.SubElement(root, "synopsis")
+    synopsis_element.text = synopsis.encode("ascii", "ignore").decode()
+
+    body_element = ET.SubElement(root, "body")
+    body_element.text = body.encode("ascii", "ignore").decode()
+
+    tree = ET.ElementTree(root)
+
+    filename = f"E:/FinalYearProject/et_articles/{year}/{month}/{day}/{id}.xml"
+    with open(filename, "wb") as file:
+        tree.write(file)
+
+    dom = parse(filename)
+    with open(filename, "w") as file:
+        file.write(dom.toprettyxml())
