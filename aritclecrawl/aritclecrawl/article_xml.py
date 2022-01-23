@@ -1,9 +1,13 @@
 import xml.etree.ElementTree as ET
 from xml.dom.minidom import parse
+from .params import main_directory
 
 
 def GenerateXml(id, day, month, year, title, synopsis, body):
     root = ET.Element("article")
+
+    id_element = ET.SubElement(root, "Unique_article_id")
+    id_element.text = id.encode("ascii", "ignore").decode()
 
     day_element = ET.SubElement(root, "day")
     day_element.text = day.encode("ascii", "ignore").decode()
@@ -25,7 +29,7 @@ def GenerateXml(id, day, month, year, title, synopsis, body):
 
     tree = ET.ElementTree(root)
 
-    filename = f"E:/FinalYearProject/et_articles/{year}/{month}/{day}/{id}.xml"
+    filename = f"{main_directory}/et_articles/{year}/{month}/{day}/{id}.xml"
     with open(filename, "wb") as file:
         tree.write(file)
 

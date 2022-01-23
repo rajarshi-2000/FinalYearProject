@@ -1,16 +1,6 @@
 # import scrapy
-# from aritclecrawl.aritclecrawl.utils.et_link_gen import get_links
+# from ..et_link_gen import get_links
 #
-#
-# def readDataFile(path: str) -> list:
-#     links = []
-#     with open(path, "r") as readFile:
-#         while True:
-#             line = readFile.readline()
-#             if not line:
-#                 break
-#             links.append(line[1:])
-#     return links
 #
 #
 # class NewsSpider(scrapy.Spider):
