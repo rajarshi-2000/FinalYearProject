@@ -3,7 +3,7 @@ from xml.dom.minidom import parse
 from .params import main_directory
 
 
-def GenerateXml(id, day, month, year, title, synopsis, body):
+def GenerateXml(id, day, month, year, time, timezone, title, synopsis, body):
     root = ET.Element("article")
 
     id_element = ET.SubElement(root, "Unique_article_id")
@@ -17,6 +17,12 @@ def GenerateXml(id, day, month, year, title, synopsis, body):
 
     year_element = ET.SubElement(root, "year")
     year_element.text = year.encode("ascii", "ignore").decode()
+
+    time_element = ET.SubElement(root, "time")
+    time_element.text = time.encode("ascii", "ignore").decode()
+
+    timezone_element = ET.SubElement(root, "timezone")
+    timezone_element.text = timezone.encode("ascii", "ignore").decode()
 
     title_element = ET.SubElement(root, "title")
     title_element.text = title.encode("ascii", "ignore").decode()
